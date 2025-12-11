@@ -1,0 +1,26 @@
+{
+  "name": "gpt-visualizer",
+  "version": "1.0.0",
+  "description": "3D visualization tool for GPT token embeddings",
+  "private": true,
+  "scripts": {
+    "client:start": "cd client && npm start",
+    "client:build": "cd client && npm run build",
+    "client:test": "cd client && npm test",
+    "server:start": "cd server && python main.py",
+    "server:dev": "cd server && uvicorn main:app --reload",
+    "server:install": "cd server && python -m pip install -r requirements.txt",
+    "install:all": "npm install && npm run server:install",
+    "dev": "concurrently \"npm run client:start\" \"npm run server:dev\"",
+    "dev:client": "npm run client:start",
+    "dev:server": "npm run server:dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^10.1.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
