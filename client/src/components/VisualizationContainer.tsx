@@ -7,10 +7,11 @@ const TARGET_FPS = 60; //프레임 수정하려면 이거만 수정하면됨
 const FRAME_INTERVAL_MS = 1000 / TARGET_FPS;
 
 const VisualizationContainer: React.FC = () => {
-  // 테스트용 입력, 이후에는 유저의 요청에 맞는 입력으로 바꿀거임 
-  const inputText = 'The quick brown fox jumps over the lazy dog.';
+  // 사용자 입력 상태
+  const [inputText, setInputText] = useState<string>('');
+  const [submittedText, setSubmittedText] = useState<string>('');
   const [visualizationData, setVisualizationData] = useState<VisualizeResponse | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   
   // 애니메이션 스텝: 0 = 입력토큰만, 1~N = 출력 토큰
@@ -33,18 +34,33 @@ const VisualizationContainer: React.FC = () => {
   const delayTimerRef = useRef<number | null>(null);
   const growTimerRef = useRef<number | null>(null);
 
-  // POST
+  // 텍스트 제출 핸들러
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputText.trim()) {
+      setSubmittedText(inputText.trim());
+    }
+  };
+
+  // POST - submittedText가 변경될 때만 API 호출
   useEffect(() => {
+    if (!submittedText) return;
+    
     const fetchOutput = async () => {
       setIsLoading(true);
       setError(null);
       
       try {
-        const result = await visualizeApi.getTokenVectors(inputText);
+        const result = await visualizeApi.getTokenVectors(submittedText);
         setVisualizationData({
           tokens: result.tokens,
         });
         setAnimationStep(0); // 데이터 로드 시 애니메이션 리셋
+        setIsPlaying(false); // 재생 상태 리셋
+        setIsGathering(false);
+        setIsGrowing(false);
+        setGatherProgress(0);
+        setGrowProgress(0);
       } catch (err) {
         console.error('Error fetching output:', err);
         setError('Failed to fetch output');
@@ -54,7 +70,7 @@ const VisualizationContainer: React.FC = () => {
     };
 
     fetchOutput();
-  }, [inputText]);
+  }, [submittedText]);
 
   // 입력/출력 토큰 분리
   const { inputTokens, outputTokens } = useMemo(() => {
@@ -206,27 +222,78 @@ const VisualizationContainer: React.FC = () => {
 
   return (
     <div className="App" style={{ position: 'relative', width: '100%', height: '100vh' }}>
-      {/* 상단 정보 패널 */}
+      {/* 상단 입력 패널 */}
       <div style={{ 
         position: 'absolute', 
         top: 20, 
         left: 20, 
+        right: 20,
         zIndex: 10,
-        background: 'rgba(0, 0, 0, 0.7)',
+        background: 'rgba(0, 0, 0, 0.8)',
         padding: '15px 20px',
         borderRadius: '8px',
         color: 'white',
         fontFamily: 'monospace'
       }}>
-        <div style={{ marginBottom: '10px' }}>
-          <strong style={{ color: '#52c41a' }}>Input:</strong> {inputText}
-        </div>
-        <div>
-          <strong style={{ color: '#ff4d4f' }}>Output:</strong>{' '}
-          {isLoading 
-            ? 'Loading...' 
-            : outputTokens.slice(0, animationStep).map(t => t.token).join(' ') || '(waiting...)'}
-        </div>
+        {/* 입력 폼 */}
+        <form onSubmit={handleSubmit} style={{ marginBottom: submittedText ? '12px' : 0 }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <input
+              type="text"
+              value={inputText}
+              onChange={(e) => {
+                // 영어, 숫자, 공백, 기본 문장부호만 허용
+                const filtered = e.target.value.replace(/[^a-zA-Z0-9\s.,!?;:'"()-]/g, '');
+                setInputText(filtered);
+              }}
+              placeholder="Enter English text to visualize..."
+              disabled={isLoading}
+              style={{
+                flex: 1,
+                padding: '10px 14px',
+                borderRadius: '6px',
+                border: '1px solid #444',
+                background: '#1a1a1a',
+                color: 'white',
+                fontSize: '14px',
+                fontFamily: 'monospace',
+                outline: 'none',
+              }}
+            />
+            <button
+              type="submit"
+              disabled={isLoading || !inputText.trim()}
+              style={{
+                padding: '10px 20px',
+                borderRadius: '6px',
+                border: 'none',
+                background: isLoading ? '#666' : '#52c41a',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: isLoading || !inputText.trim() ? 'not-allowed' : 'pointer',
+                opacity: isLoading || !inputText.trim() ? 0.6 : 1,
+              }}
+            >
+              {isLoading ? 'Processing...' : 'Visualize'}
+            </button>
+          </div>
+        </form>
+
+        {/* 결과 표시 */}
+        {submittedText && (
+          <>
+            <div style={{ marginBottom: '8px' }}>
+              <strong style={{ color: '#52c41a' }}>Input:</strong> {submittedText}
+            </div>
+            <div>
+              <strong style={{ color: '#ff4d4f' }}>Output:</strong>{' '}
+              {isLoading 
+                ? 'Loading...' 
+                : outputTokens.slice(0, animationStep).map(t => t.token).join(' ') || '(waiting...)'}
+            </div>
+          </>
+        )}
         {error && (
           <div style={{ marginTop: '10px', color: '#ff4d4f', fontSize: '12px' }}>
             {error}
@@ -234,20 +301,37 @@ const VisualizationContainer: React.FC = () => {
         )}
       </div>
 
-      {/* 3D 시각화 */}
-      {visualizationData && !isLoading && (
-        <TokenVisualization 
-          tokens={visibleTokens}
-          isAnimating={isGathering}
-          animationProgress={gatherProgress}
-          targetPosition={nextTargetPosition}
-          isGrowing={isGrowing}
-          growProgress={growProgress}
-        />
+      {/* 3D 시각화 - 항상 표시 (좌표계는 항상 보임) */}
+      <TokenVisualization 
+        tokens={isLoading ? [] : visibleTokens}
+        isAnimating={isGathering}
+        animationProgress={gatherProgress}
+        targetPosition={nextTargetPosition}
+        isGrowing={isGrowing}
+        growProgress={growProgress}
+      />
+
+      {/* 로딩 인디케이터 */}
+      {isLoading && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 10,
+          background: 'rgba(0, 0, 0, 0.8)',
+          padding: '20px 40px',
+          borderRadius: '8px',
+          color: 'white',
+          fontFamily: 'monospace',
+          fontSize: '16px',
+        }}>
+          Processing...
+        </div>
       )}
 
-      {/* 하단 애니메이션 컨트롤 바 */}
-      {visualizationData && !isLoading && maxOutputSteps > 0 && (
+      {/* 하단 애니메이션 컨트롤 바 - 항상 표시, 데이터 없으면 비활성화 */}
+      {!isLoading && (
         <div style={{
           position: 'absolute',
           bottom: 30,
@@ -263,29 +347,33 @@ const VisualizationContainer: React.FC = () => {
           gap: '12px',
           color: 'white',
           fontFamily: 'monospace',
+          opacity: visualizationData ? 1 : 0.5,
         }}>
           {/* 상단: 재생 컨트롤 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             {/* 재생/일시정지 버튼 */}
             <button
               onClick={() => {
+                if (!visualizationData || maxOutputSteps === 0) return;
                 if (animationStep >= maxOutputSteps) {
                   setAnimationStep(0);
                 }
                 setIsPlaying(!isPlaying);
               }}
+              disabled={!visualizationData || maxOutputSteps === 0}
               style={{
                 background: isPlaying ? '#ff4d4f' : '#52c41a',
                 border: 'none',
                 borderRadius: '50%',
                 width: '36px',
                 height: '36px',
-                cursor: 'pointer',
+                cursor: visualizationData && maxOutputSteps > 0 ? 'pointer' : 'not-allowed',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '14px',
                 color: 'white',
+                opacity: visualizationData && maxOutputSteps > 0 ? 1 : 0.5,
               }}
             >
               {isPlaying ? '⏸' : '▶'}
@@ -295,16 +383,19 @@ const VisualizationContainer: React.FC = () => {
             <input
               type="range"
               min={0}
-              max={maxOutputSteps}
+              max={maxOutputSteps || 1}
+              disabled={!visualizationData || maxOutputSteps === 0}
               value={animationStep}
               onChange={(e) => {
+                if (!visualizationData) return;
                 setIsPlaying(false);
                 setAnimationStep(Number(e.target.value));
               }}
               style={{
                 width: '200px',
-                cursor: 'pointer',
+                cursor: visualizationData ? 'pointer' : 'not-allowed',
                 accentColor: '#ff4d4f',
+                opacity: visualizationData ? 1 : 0.5,
               }}
             />
 
@@ -335,18 +426,21 @@ const VisualizationContainer: React.FC = () => {
             {/* 리셋 버튼 */}
             <button
               onClick={() => {
+                if (!visualizationData) return;
                 setIsPlaying(false);
                 setAnimationStep(0);
               }}
+              disabled={!visualizationData}
               style={{
                 background: '#666',
                 border: 'none',
                 borderRadius: '4px',
                 padding: '4px 10px',
-                cursor: 'pointer',
+                cursor: visualizationData ? 'pointer' : 'not-allowed',
                 color: 'white',
                 fontSize: '11px',
                 marginLeft: '10px',
+                opacity: visualizationData ? 1 : 0.5,
               }}
             >
               Reset
