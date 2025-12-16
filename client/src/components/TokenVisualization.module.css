@@ -1,0 +1,7 @@
+/* 전체 시각화 컨테이너 */
+.container {
+  width: 100%;
+  height: 100vh;
+  background: var(--color-background-dark);
+}
+

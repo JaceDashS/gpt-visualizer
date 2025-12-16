@@ -1,0 +1,17 @@
+/* 전역 CSS 변수 - 색상과 공통 스타일 정의 */
+:root {
+  /* 기본 색상 (좌표계 X, Y, Z 축 색상과 동일) */
+  --color-red: #ff4d4f;
+  --color-green: #52c41a;
+  --color-blue: #1890ff;
+
+  /* UI colors */
+  --color-background-overlay: rgba(0, 0, 0, 0.8);
+  --color-background-dark: #1a1a1a;
+  --color-border: #444;
+  --color-button-disabled: #666;
+  --color-white: #ffffff;
+
+  /* Font */
+  --font-monospace: monospace;
+}

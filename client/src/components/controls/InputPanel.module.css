@@ -1,0 +1,79 @@
+/* 상단 입력 패널 */
+.container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 10;
+  background: var(--color-background-overlay);
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: var(--color-white);
+  font-family: var(--font-monospace);
+}
+
+/* 입력 폼 */
+.form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.formWithResult {
+  margin-bottom: 12px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-background-dark);
+  color: var(--color-white);
+  font-size: 14px;
+  font-family: var(--font-monospace);
+  outline: none;
+}
+
+.submitButton {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  background: var(--color-green);
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submitButtonLoading {
+  background: var(--color-button-disabled);
+}
+
+.submitButtonDisabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 결과 표시 */
+.resultRow {
+  margin-bottom: 8px;
+}
+
+.resultRowLast {
+  margin-bottom: 0;
+}
+
+.inputLabel {
+  color: var(--color-green);
+}
+
+.outputLabel {
+  color: var(--color-red);
+}
+
+.error {
+  margin-top: 10px;
+  color: var(--color-red);
+  font-size: 12px;
+}

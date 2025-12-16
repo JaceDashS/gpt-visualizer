@@ -1,0 +1,7 @@
+/* 전체 시각화를 관리하는 컨테이너 */
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
