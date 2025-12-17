@@ -11,7 +11,14 @@
   --color-border: #444;
   --color-button-disabled: #666;
   --color-white: #ffffff;
+  --color-text-light-gray: #9aa0a6; /* FloatingNav 기본 텍스트 */
+  --color-text-hover: #e8eaed; /* FloatingNav hover/active */
+  --color-text-separator: #7b8087; /* FloatingNav separator */
 
   /* Font */
   --font-monospace: monospace;
+
+  /* Animation durations */
+  --about-overlay-slide-up-duration: 260ms;
+  --about-overlay-slide-down-duration: 220ms;
 }

@@ -8,7 +8,7 @@
   gap: 6px;
   font-family: var(--font-monospace);
   font-size: 12px;
-  color: #9aa0a6;
+  color: var(--color-text-light-gray);
 }
 
 .link {
@@ -17,17 +17,31 @@
 }
 
 .link:hover {
-  color: #e8eaed;
+  color: var(--color-text-hover);
+  text-decoration: underline;
+}
+
+.linkButton {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  color: var(--color-text-hover);
   text-decoration: underline;
 }
 
 .active {
-  color: #e8eaed;
+  color: var(--color-text-hover);
   text-decoration: underline;
 }
 
 .separator {
-  color: #7b8087;
+  color: var(--color-text-separator);
 }
 
 

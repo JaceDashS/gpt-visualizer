@@ -1,0 +1,113 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;       /* 컨테이너를 화면 세로 중간에 위치 */
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+}
+
+.sheet {
+  width: min(640px, 100% - 40px);  /* 좌우 여백 20px */
+  max-width: 640px;
+  height: 50vh;                    /* 화면 높이의 절반까지만 */
+  max-height: 50vh;
+  background: var(--color-background-overlay);
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  padding: 16px 20px 20px;
+  color: var(--color-white);
+  font-family: var(--font-monospace);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp var(--about-overlay-slide-up-duration) ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100vh); /* 화면 아래에서 시작 */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100vh); /* 다시 화면 아래로 내려감 */
+    opacity: 0;
+  }
+}
+
+.closeButton {
+  border: none;
+  background: transparent;
+  color: #9aa0a6;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 4px;
+  float: right;
+}
+
+.closeButton:hover {
+  color: #e8eaed;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 8px;
+  flex: 1;
+  min-height: 0;
+}
+
+.closing {
+  animation: slideDown var(--about-overlay-slide-down-duration) ease-in forwards;
+}
+
+.profileWrapper {
+  flex-shrink: 0;
+}
+
+.profileImage {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-border);
+}
+
+.textWrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.message {
+  margin: 0;
+  font-size: 13px;
+  color: #c9cdd2;
+}
+
+.aboutText {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+
