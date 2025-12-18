@@ -3,7 +3,7 @@ import styles from './AboutOverlay.module.css';
 import { aboutApi, AboutResponse } from '../../services/api';
 import { detectUserLanguage } from '../../utils/language';
 import type { Language } from '../../pages/howItWorksText';
-import { ABOUT_OVERLAY_SLIDE_DOWN_DURATION } from '../../constants/animation';
+import { OVERLAY_SLIDE_DOWN_DURATION } from '../../constants/animation';
 
 interface AboutOverlayProps {
   isOpen: boolean;
@@ -52,7 +52,7 @@ const AboutOverlay: React.FC<AboutOverlayProps> = ({ isOpen, onClose }) => {
       timer = window.setTimeout(() => {
         setIsMounted(false);
         setIsClosing(false);
-      }, ABOUT_OVERLAY_SLIDE_DOWN_DURATION); // 닫힐때 닫히는 시간 후에 언마운트
+      }, OVERLAY_SLIDE_DOWN_DURATION); // 닫힐때 닫히는 시간 후에 언마운트
     }
 
     return () => {

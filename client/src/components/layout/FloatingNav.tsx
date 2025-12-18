@@ -4,12 +4,13 @@ import styles from './FloatingNav.module.css';
 
 interface FloatingNavProps {
   onToggleAbout: () => void;
+  onToggleFeedback: () => void;
   onNavigate: () => void;
 }
 
-// 우측 하단 텍스트 네비게이션: Home | How it works | About
+// 우측 하단 텍스트 네비게이션: Home | How it works | About | Feedback
 // 어떤 스타일을 적용할지 결정하는 로직
-const FloatingNav: React.FC<FloatingNavProps> = ({ onToggleAbout, onNavigate }) => {
+const FloatingNav: React.FC<FloatingNavProps> = ({ onToggleAbout, onToggleFeedback, onNavigate }) => {
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -38,6 +39,14 @@ const FloatingNav: React.FC<FloatingNavProps> = ({ onToggleAbout, onNavigate }) 
         onClick={onToggleAbout}
       >
         About
+      </button>
+      <span className={styles.separator}>|</span>
+      <button
+        type="button"
+        className={styles.linkButton}
+        onClick={onToggleFeedback}
+      >
+        Feedback
       </button>
     </nav>
   );

@@ -22,7 +22,7 @@
   font-family: var(--font-monospace);
   display: flex;
   flex-direction: column;
-  animation: slideUp var(--about-overlay-slide-up-duration) ease-out forwards;
+  animation: slideUp var(--overlay-slide-up-duration) ease-out forwards;
 }
 
 @keyframes slideUp {
@@ -71,7 +71,7 @@
 }
 
 .closing {
-  animation: slideDown var(--about-overlay-slide-down-duration) ease-in forwards;
+  animation: slideDown var(--overlay-slide-down-duration) ease-in forwards;
 }
 
 .profileWrapper {

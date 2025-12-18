@@ -15,6 +15,6 @@ export const MAX_ANIMATION_SPEED = 3;
 export const ANIMATION_SPEED_STEP = 0.25;
 export const DEFAULT_ANIMATION_SPEED = 1;
 
-// AboutOverlay 애니메이션 시간 (ms)
-export const ABOUT_OVERLAY_SLIDE_UP_DURATION = 260;
-export const ABOUT_OVERLAY_SLIDE_DOWN_DURATION = 220;
+// Overlay 애니메이션 시간 (ms) - About, Feedback 등 모든 오버레이에서 사용
+export const OVERLAY_SLIDE_UP_DURATION = 260;
+export const OVERLAY_SLIDE_DOWN_DURATION = 220;

@@ -19,6 +19,6 @@
   --font-monospace: monospace;
 
   /* Animation durations */
-  --about-overlay-slide-up-duration: 260ms;
-  --about-overlay-slide-down-duration: 220ms;
+  --overlay-slide-up-duration: 260ms;
+  --overlay-slide-down-duration: 220ms;
 }

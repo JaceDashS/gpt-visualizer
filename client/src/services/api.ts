@@ -71,3 +71,55 @@ export const aboutApi = {
   },
 };
 
+// 코멘트/피드백 시스템 인터페이스
+export interface CommentRequest {
+  parentHeaderId: number | null;
+  content: string;
+  userPassword: string;
+}
+
+export interface CommentResponse {
+  id: number;
+}
+
+export const feedbackApi = {
+  /**
+   * 피드백(코멘트)을 서버에 제출합니다.
+   * IP는 서버에서 자동으로 추출되어 해싱됩니다.
+   * @param comment 코멘트 데이터 (parentHeaderId는 null, content와 userPassword는 필수)
+   * @returns 생성된 코멘트 ID
+   */
+  async submitFeedback(comment: { content: string; userPassword: string }): Promise<CommentResponse> {
+    try {
+      const requestBody: CommentRequest = {
+        parentHeaderId: null, // 최상위 코멘트이므로 null
+        content: comment.content,
+        userPassword: comment.userPassword,
+      };
+      //api base url 확인
+      // console.log("API_BASE_URL", API_BASE_URL);
+
+      const response = await fetch(`${API_BASE_URL}/api/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || `Failed to submit feedback: ${response.status}`
+        );
+      }
+
+      const data = (await response.json()) as CommentResponse;
+      return data;
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      throw error;
+    }
+  },
+};
+
