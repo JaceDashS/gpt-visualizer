@@ -95,10 +95,27 @@ const VisualizationContainer: React.FC = () => {
   }, [visualizationData, animationStep, outputTokens, inputTokens]);
 
   // 출력 텍스트 생성
-  const outputText = outputTokens
-    .slice(0, animationStep)
-    .map(t => t.token)
-    .join(' ');
+  // 구두점(. , 등)은 앞 토큰과 붙여서 표시
+  const isPunctuation = (token: string): boolean => {
+    // 일반적인 구두점 문자들
+    return /^[.,;:!?。，、；：！？]+$/.test(token);
+  };
+  
+  const outputText = (() => {
+    const tokens = outputTokens.slice(0, animationStep).map(t => t.token);
+    if (tokens.length === 0) return '';
+    
+    let result = tokens[0];
+    for (let i = 1; i < tokens.length; i++) {
+      // 구두점이면 공백 없이 붙임, 아니면 공백 추가
+      if (isPunctuation(tokens[i])) {
+        result += tokens[i];
+      } else {
+        result += ' ' + tokens[i];
+      }
+    }
+    return result;
+  })();
 
   const maxOutputSteps = outputTokens.length;
 

@@ -31,13 +31,23 @@ export const visualizeApi = {
    */
   async getTokenVectors(inputText: string): Promise<VisualizeResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/visualize`, {
+      // 테스트용: 로컬 서버로 직접 요청
+      const response = await fetch('http://localhost:8000/api/visualize', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ input_text: inputText } as VisualizeRequest),
       });
+
+      // 기존 코드 (나중에 살릴 예정)
+      // const response = await fetch(`${API_BASE_URL}/api/visualize`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ input_text: inputText } as VisualizeRequest),
+      // });
 
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.status}`);
