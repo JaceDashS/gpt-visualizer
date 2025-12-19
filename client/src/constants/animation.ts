@@ -18,3 +18,6 @@ export const DEFAULT_ANIMATION_SPEED = 1;
 // Overlay 애니메이션 시간 (ms) - About, Feedback 등 모든 오버레이에서 사용
 export const OVERLAY_SLIDE_UP_DURATION = 260;
 export const OVERLAY_SLIDE_DOWN_DURATION = 220;
+
+// About overlay scrollbar fade out delay
+export const ABOUT_SCROLLBAR_FADE_OUT_DELAY = 300; // ms

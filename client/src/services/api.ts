@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, ASSETS_CONFIG } from '../config/api';
 
 export interface VisualizeRequest {
   input_text: string;
@@ -15,12 +15,12 @@ export interface VisualizeResponse {
 }
 
 // About 페이지 소개글 응답 타입
-// 백엔드에서 { en, zh, jp, kr } 형태로 내려온다고 가정
+// GitHub JSON에서 { en, ko, ja, zh } 형태로 가져옴
 export interface AboutResponse {
   en: string;
+  ko: string;
+  ja: string;
   zh: string;
-  jp: string;
-  kr: string;
 }
 
 export const visualizeApi = {
@@ -54,11 +54,11 @@ export const visualizeApi = {
 
 export const aboutApi = {
   /**
-   * 게이트웨이 서버에서 소개글(다국어)을 가져온다.
-   * 백엔드에서 /api/about 으로 { en, zh, jp, kr } 형태의 객체를 내려준다고 가정.
+   * GitHub에서 소개글(다국어) JSON을 가져온다.
+   * { en, ko, ja, zh } 형태의 객체를 반환.
    */
   async getAbout(): Promise<AboutResponse> {
-    const response = await fetch(`${API_BASE_URL}/api/about`, {
+    const response = await fetch(ASSETS_CONFIG.profileOverview, {
       method: 'GET',
     });
 

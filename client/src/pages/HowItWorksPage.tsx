@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import TokenVisualization from '../components/TokenVisualization';
 import { TokenVector } from '../services/api';
 import { calculateMidpoint, Vector3Tuple } from '../utils/vectorMath';
-import { detectUserLanguage } from '../utils/language';
 import styles from './HowItWorksPage.module.css';
-import { getSteps, getUiText, Language } from './howItWorksText';
+import { getSteps, getUiText } from './howItWorksText';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const REPLAY_LABEL = 'Replay step';
 
@@ -29,7 +29,7 @@ const TOKEN_VECTORS: Record<string, Vector3Tuple> = {
 const HowItWorksPage: React.FC = () => {
   const [step, setStep] = useState<StepId>(0);
   const [replayKey, setReplayKey] = useState(0);
-  const [language, setLanguage] = useState<Language>(() => detectUserLanguage());
+  const { language, setLanguage } = useLanguage();
 
   const demoInputText = 'Explain GPT in simple terms';
 
