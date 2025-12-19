@@ -1,0 +1,55 @@
+{
+  "uiText": {
+    "title": "How it works",
+    "prev": "Prev",
+    "next": "Next"
+  },
+  "steps": [
+    {
+      "title": "1) Enter text → vectorize",
+      "paragraphs": [
+        "When you enter a sentence, the model splits it into small pieces (tokens) and converts each token into a numeric vector (embedding).",
+        "Simply put, it's turning text into numbers."
+      ],
+      "boldTexts": ["turning text into numbers"]
+    },
+    {
+      "title": "2) Send tokens (vectors) to the model",
+      "paragraphs": [
+        "The model receives the vectors built so far and uses them as \"context\" to decide what should come next.",
+        "This is the step where we pass the current context to the model."
+      ],
+      "boldTexts": ["pass the current context to the model"]
+    },
+    {
+      "title": "3) Generate the next token",
+      "paragraphs": [
+        "The model picks the next token, outputs it, and then adds it back into the context.",
+        "Repeating this produces the sentence one token at a time."
+      ]
+    },
+    {
+      "title": "4) When a vector has length 0",
+      "paragraphs": [
+        "Sometimes a token's start and end positions collapse to the same spot, so its vector has length 0.",
+        "In that case there is no real arrow to draw, so you only see the token's text label without any line attached."
+      ],
+      "boldTexts": ["you only see the token's text label without any line attached"]
+    },
+    {
+      "title": "5) Visualize high‑D vectors in 3D (PCA)",
+      "paragraphs": [
+        "Embedding vectors are usually very high-dimensional (e.g. 2048D), so they're not very intuitive on their own.",
+        "We reduce them to 3D for visualization while keeping as much structure as possible. A common method is PCA(Wikipedia)."
+      ],
+      "boldTexts": ["2048D", "3D", "PCA"],
+      "links": [
+        {
+          "text": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Principal_component_analysis"
+        }
+      ]
+    }
+  ]
+}
+

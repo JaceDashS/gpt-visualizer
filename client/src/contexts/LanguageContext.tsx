@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { detectUserLanguage } from '../utils/language';
-import type { Language } from '../pages/howItWorksText';
+import type { Language } from '../pages/HowItWorksPage';
 
 interface LanguageContextType {
   language: Language;

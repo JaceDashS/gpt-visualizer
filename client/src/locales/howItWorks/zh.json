@@ -1,0 +1,56 @@
+{
+  "uiText": {
+    "title": "How it works",
+    "prev": "上一页",
+    "next": "下一页"
+  },
+  "steps": [
+    {
+      "title": "1) 输入文本 → 向量化",
+      "paragraphs": [
+        "当你输入一句话时，模型会把它切分成更小的片段（token），并把每个 token 转成数字向量（embedding）。",
+        "简单说，就是把文字变成计算机可以处理的数字。"
+      ],
+      "boldTexts": ["计算机可以处理的数字"]
+    },
+    {
+      "title": "2) 把当前的 token（向量）发送给模型",
+      "paragraphs": [
+        "把目前已有的 token 向量发送给模型后，模型会把它们当成\"上下文\"，用来判断接下来应该出现什么。",
+        "这个步骤就是把当前上下文交给模型。"
+      ],
+      "boldTexts": ["把当前上下文交给模型"]
+    },
+    {
+      "title": "3) 逐步生成下一个 token",
+      "paragraphs": [
+        "模型会选出下一个 token，把它输出出来，然后再把这个 token 加回上下文里。",
+        "重复这样做，句子就会一个 token 一个 token 地生成出来。"
+      ],
+      "boldTexts": ["一个 token 一个 token 地"]
+    },
+    {
+      "title": "4) 向量长度为 0 时只显示文字",
+      "paragraphs": [
+        "有时某个 token 的起点和终点会完全重合，让向量的长度变成 0。",
+        "这时其实没有可以画出的箭头（方向线），所以画面上可能只会看到悬在空间中的文字标签，而看不到连着的线。"
+      ],
+      "boldTexts": ["向量的长度变成 0", "画面上可能只会看到悬在空间中的文字标签，而看不到连着的线"]
+    },
+    {
+      "title": "5) 用 PCA 把高维向量可视化成 3D",
+      "paragraphs": [
+        "这些向量通常维度很高（例如2048 维），直接看并不直观。",
+        "我们会在尽量保留结构的前提下，把它压缩到3D来展示。常用的方法之一是PCA(Wikipedia)。"
+      ],
+      "boldTexts": ["2048 维", "3D", "PCA"],
+      "links": [
+        {
+          "text": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Principal_component_analysis"
+        }
+      ]
+    }
+  ]
+}
+

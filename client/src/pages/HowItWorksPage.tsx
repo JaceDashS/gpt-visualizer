@@ -3,8 +3,114 @@ import TokenVisualization from '../components/TokenVisualization';
 import { TokenVector } from '../services/api';
 import { calculateMidpoint, Vector3Tuple } from '../utils/vectorMath';
 import styles from './HowItWorksPage.module.css';
-import { getSteps, getUiText } from './howItWorksText';
+import { howItWorksData } from '../locales/howItWorks';
 import { useLanguage } from '../contexts/LanguageContext';
+
+export const PCA_WIKIPEDIA_URL = 'https://en.wikipedia.org/wiki/Principal_component_analysis';
+
+export type Language = 'en' | 'ko' | 'ja' | 'zh';
+
+export interface UiText {
+  title: string;
+  prev: string;
+  next: string;
+  stepLabel: (n: number, total: number) => string;
+}
+
+export interface StepContent {
+  title: string;
+  body: React.ReactNode;
+}
+
+export const getUiText = (language: Language): UiText => {
+  const data = howItWorksData[language];
+  return {
+    title: data.uiText.title,
+    prev: data.uiText.prev,
+    next: data.uiText.next,
+    stepLabel: (n, total) => `Step ${n} / ${total}`,
+  };
+};
+
+// JSON 데이터를 JSX로 변환하는 헬퍼 함수
+// paragraphs 배열을 <br />로 구분하고, boldTexts를 <strong>으로 감싸며, links를 <a> 태그로 변환
+const renderStepBody = (
+  stepData: {
+    paragraphs: string[];
+    boldTexts?: string[];
+    links?: Array<{ text: string; url: string }>;
+  },
+  cssStyles: typeof styles
+): React.ReactNode => {
+  const { paragraphs, boldTexts = [], links = [] } = stepData;
+  
+  const processText = (text: string, linkMap: Map<string, string>): React.ReactNode[] => {
+    let result: (string | React.ReactElement)[] = [text];
+    
+    // boldTexts 처리: 각 bold 텍스트를 찾아서 <strong>으로 감싸기
+    // 순서대로 처리 (중첩되지 않는 한)
+    boldTexts.forEach((boldText) => {
+      const newResult: (string | React.ReactElement)[] = [];
+      result.forEach((item, itemIdx) => {
+        if (typeof item === 'string') {
+          const linkUrl = linkMap.get(boldText);
+          const parts = item.split(boldText);
+          
+          for (let i = 0; i < parts.length; i++) {
+            if (parts[i]) {
+              newResult.push(parts[i]);
+            }
+            if (i < parts.length - 1) {
+              // 링크가 있는 경우
+              if (linkUrl) {
+                newResult.push(
+                  <strong key={`link-${itemIdx}-${i}`}>
+                    <a className={cssStyles.link} href={linkUrl} target="_blank" rel="noreferrer">
+                      {boldText}
+                    </a>
+                  </strong>
+                );
+              } else {
+                newResult.push(<strong key={`bold-${itemIdx}-${i}`}>{boldText}</strong>);
+              }
+            }
+          }
+        } else {
+          newResult.push(item);
+        }
+      });
+      result = newResult;
+    });
+    
+    return result;
+  };
+
+  // 링크를 Map으로 변환 (빠른 검색을 위해)
+  const linkMap = new Map<string, string>();
+  links.forEach(link => linkMap.set(link.text, link.url));
+
+  const elements: React.ReactNode[] = [];
+  paragraphs.forEach((paragraph, idx) => {
+    if (idx > 0) {
+      elements.push(<br key={`br-${idx}`} />);
+    }
+    const processed = processText(paragraph, linkMap);
+    elements.push(...processed.map((item, itemIdx) => 
+      <React.Fragment key={`p-${idx}-${itemIdx}`}>{item}</React.Fragment>
+    ));
+  });
+
+  return <>{elements}</>;
+};
+
+export const getSteps = (language: Language): StepContent[] => {
+  const data = howItWorksData[language];
+  
+  return data.steps.map((stepData) => ({
+    title: stepData.title,
+    body: renderStepBody(stepData, styles),
+  }));
+};
 
 const REPLAY_LABEL = 'Replay step';
 

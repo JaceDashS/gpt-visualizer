@@ -1,0 +1,20 @@
+{
+  "title": "피드백",
+  "subtitle": "의견, 제안 또는 문제를 공유해주세요.",
+  "viewAllFeedback": "모든 피드백 보기",
+  "passwordLabel": "비밀번호",
+  "passwordPlaceholder": "수정/삭제를 위한 비밀번호를 입력하세요",
+  "passwordHelp": "나중에 피드백을 수정하거나 삭제하려면 이 비밀번호가 필요합니다.",
+  "contentLabel": "내용",
+  "contentPlaceholder": "의견, 제안 또는 문제를 공유해주세요...",
+  "submitButton": "피드백 제출",
+  "submitting": "제출 중...",
+  "successMessage": "✓ 피드백을 주셔서 감사합니다!",
+  "errorContent": "피드백을 입력해주세요.",
+  "errorPassword": "비밀번호를 입력해주세요.",
+  "errorSubmit": "피드백 제출에 실패했습니다. 다시 시도해주세요.",
+  "closeLabel": "피드백 닫기",
+  "showPassword": "비밀번호 표시",
+  "hidePassword": "비밀번호 숨기기"
+}
+

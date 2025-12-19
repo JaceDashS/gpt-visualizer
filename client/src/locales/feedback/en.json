@@ -1,0 +1,20 @@
+{
+  "title": "Feedback",
+  "subtitle": "Share your thoughts, suggestions, or report any issues.",
+  "viewAllFeedback": "View all feedback",
+  "passwordLabel": "Password",
+  "passwordPlaceholder": "Enter password for editing/deleting",
+  "passwordHelp": "You'll need this password to edit or delete your feedback later.",
+  "contentLabel": "Content",
+  "contentPlaceholder": "Share your thoughts, suggestions, or report issues...",
+  "submitButton": "Submit Feedback",
+  "submitting": "Submitting...",
+  "successMessage": "✓ Thank you for your feedback!",
+  "errorContent": "Please enter your feedback.",
+  "errorPassword": "Please enter a password.",
+  "errorSubmit": "Failed to submit feedback. Please try again.",
+  "closeLabel": "Close feedback",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password"
+}
+

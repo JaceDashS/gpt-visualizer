@@ -1,4 +1,4 @@
-import type { Language } from '../pages/howItWorksText';
+import type { Language } from '../pages/HowItWorksPage';
 
 // 브라우저 설정을 기반으로 앱에서 사용할 Language 코드로 매핑
 export const detectUserLanguage = (): Language => {

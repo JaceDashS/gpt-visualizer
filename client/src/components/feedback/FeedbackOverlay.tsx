@@ -3,7 +3,7 @@ import styles from './FeedbackOverlay.module.css';
 import { feedbackApi } from '../../services/api';
 import { OVERLAY_SLIDE_DOWN_DURATION } from '../../constants/animation';
 import { useLanguage } from '../../contexts/LanguageContext';
-import type { Language } from '../../pages/howItWorksText';
+import { feedbackTexts } from '../../locales/feedback';
 
 interface FeedbackOverlayProps {
   isOpen: boolean;
@@ -29,105 +29,7 @@ const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ isOpen, onClose }) =>
   const [showPassword, setShowPassword] = useState(false);
 
   // 다국어 텍스트
-  const texts = useMemo(() => {
-    const dict: Record<Language, {
-      title: string;
-      subtitle: string;
-      viewAllFeedback: string;
-      passwordLabel: string;
-      passwordPlaceholder: string;
-      passwordHelp: string;
-      contentLabel: string;
-      contentPlaceholder: string;
-      submitButton: string;
-      submitting: string;
-      successMessage: string;
-      errorContent: string;
-      errorPassword: string;
-      errorSubmit: string;
-      closeLabel: string;
-      showPassword: string;
-      hidePassword: string;
-    }> = {
-      en: {
-        title: 'Feedback',
-        subtitle: 'Share your thoughts, suggestions, or report any issues. Your name will be generated from your IP address.',
-        viewAllFeedback: 'View all feedback',
-        passwordLabel: 'Password',
-        passwordPlaceholder: 'Enter password for editing/deleting',
-        passwordHelp: "You'll need this password to edit or delete your feedback later.",
-        contentLabel: 'Content',
-        contentPlaceholder: 'Share your thoughts, suggestions, or report issues...',
-        submitButton: 'Submit Feedback',
-        submitting: 'Submitting...',
-        successMessage: '✓ Thank you for your feedback!',
-        errorContent: 'Please enter your feedback.',
-        errorPassword: 'Please enter a password.',
-        errorSubmit: 'Failed to submit feedback. Please try again.',
-        closeLabel: 'Close feedback',
-        showPassword: 'Show password',
-        hidePassword: 'Hide password',
-      },
-      ko: {
-        title: '피드백',
-        subtitle: '의견, 제안 또는 문제를 공유해주세요. 이름은 IP 주소에서 자동으로 생성됩니다.',
-        viewAllFeedback: '모든 피드백 보기',
-        passwordLabel: '비밀번호',
-        passwordPlaceholder: '수정/삭제를 위한 비밀번호를 입력하세요',
-        passwordHelp: '나중에 피드백을 수정하거나 삭제하려면 이 비밀번호가 필요합니다.',
-        contentLabel: '내용',
-        contentPlaceholder: '의견, 제안 또는 문제를 공유해주세요...',
-        submitButton: '피드백 제출',
-        submitting: '제출 중...',
-        successMessage: '✓ 피드백을 주셔서 감사합니다!',
-        errorContent: '피드백을 입력해주세요.',
-        errorPassword: '비밀번호를 입력해주세요.',
-        errorSubmit: '피드백 제출에 실패했습니다. 다시 시도해주세요.',
-        closeLabel: '피드백 닫기',
-        showPassword: '비밀번호 표시',
-        hidePassword: '비밀번호 숨기기',
-      },
-      ja: {
-        title: 'フィードバック',
-        subtitle: 'ご意見、ご提案、または問題を共有してください。名前はIPアドレスから自動生成されます。',
-        viewAllFeedback: 'すべてのフィードバックを見る',
-        passwordLabel: 'パスワード',
-        passwordPlaceholder: '編集/削除用のパスワードを入力してください',
-        passwordHelp: '後でフィードバックを編集または削除するには、このパスワードが必要です。',
-        contentLabel: '内容',
-        contentPlaceholder: 'ご意見、ご提案、または問題を共有してください...',
-        submitButton: 'フィードバックを送信',
-        submitting: '送信中...',
-        successMessage: '✓ フィードバックありがとうございます！',
-        errorContent: 'フィードバックを入力してください。',
-        errorPassword: 'パスワードを入力してください。',
-        errorSubmit: 'フィードバックの送信に失敗しました。もう一度お試しください。',
-        closeLabel: 'フィードバックを閉じる',
-        showPassword: 'パスワードを表示',
-        hidePassword: 'パスワードを非表示',
-      },
-      zh: {
-        title: '反馈',
-        subtitle: '分享您的想法、建议或报告任何问题。您的姓名将从IP地址自动生成。',
-        viewAllFeedback: '查看所有反馈',
-        passwordLabel: '密码',
-        passwordPlaceholder: '输入用于编辑/删除的密码',
-        passwordHelp: '您需要此密码来编辑或删除您的反馈。',
-        contentLabel: '内容',
-        contentPlaceholder: '分享您的想法、建议或报告问题...',
-        submitButton: '提交反馈',
-        submitting: '提交中...',
-        successMessage: '✓ 感谢您的反馈！',
-        errorContent: '请输入您的反馈。',
-        errorPassword: '请输入密码。',
-        errorSubmit: '提交反馈失败。请重试。',
-        closeLabel: '关闭反馈',
-        showPassword: '显示密码',
-        hidePassword: '隐藏密码',
-      },
-    };
-    return dict[language];
-  }, [language]);
+  const texts = useMemo(() => feedbackTexts[language], [language]);
 
   // 열리고 닫힐 때 애니메이션이 자연스럽게 보이도록 내부 마운트 상태 관리
   useEffect(() => {

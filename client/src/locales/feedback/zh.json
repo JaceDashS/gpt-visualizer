@@ -1,0 +1,20 @@
+{
+  "title": "反馈",
+  "subtitle": "分享您的想法、建议或报告任何问题。",
+  "viewAllFeedback": "查看所有反馈",
+  "passwordLabel": "密码",
+  "passwordPlaceholder": "输入用于编辑/删除的密码",
+  "passwordHelp": "您需要此密码来编辑或删除您的反馈。",
+  "contentLabel": "内容",
+  "contentPlaceholder": "分享您的想法、建议或报告问题...",
+  "submitButton": "提交反馈",
+  "submitting": "提交中...",
+  "successMessage": "✓ 感谢您的反馈！",
+  "errorContent": "请输入您的反馈。",
+  "errorPassword": "请输入密码。",
+  "errorSubmit": "提交反馈失败。请重试。",
+  "closeLabel": "关闭反馈",
+  "showPassword": "显示密码",
+  "hidePassword": "隐藏密码"
+}
+
