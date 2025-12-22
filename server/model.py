@@ -111,4 +111,3 @@ except Exception as e:
     print(f"Model load failed at startup: {e}")
     print("Model will be loaded on first request")
     llama = None
-
