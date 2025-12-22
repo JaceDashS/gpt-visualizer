@@ -5,6 +5,7 @@ WORKDIR /app
 # 빌드 의존성 (llama-cpp-python 빌드용)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc g++ build-essential \
+    cmake \
     libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -12,7 +13,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 빌드 도구 제거(선택: 문제 생기면 일단 제거하지 말고 디버깅)
-RUN apt-get purge -y gcc g++ build-essential \
+RUN apt-get purge -y gcc g++ build-essential cmake \
     && apt-get autoremove -y \
     && apt-get clean
 
