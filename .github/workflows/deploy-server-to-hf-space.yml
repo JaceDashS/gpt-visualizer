@@ -1,23 +1,36 @@
-﻿name: Deploy to Hugging Face Space
+﻿name: Deploy server to Hugging Face Space
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+    paths:
+      - "server/**"
+      - ".github/workflows/deploy-server-to-hf-space.yml"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Prepare server-only bundle
+        run: |
+          mkdir -p out
+          rsync -av --delete server/ out/
 
       - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          cd out
+          git init
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
+          git add .
+          git commit -m "Deploy server to HF Space" || true
+
+          git branch -M main
           git remote add hf https://huggingface.co/spaces/JaceDashS/gpt-visualizer
           git push https://JaceDashS:${HF_TOKEN}@huggingface.co/spaces/JaceDashS/gpt-visualizer main --force
