@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Node modules (클라이언트)
+node_modules/
+client/
+
+# 서버 테스트 파일
+server/test/
+
+# 기타
+*.log
+.DS_Store
+.cursor/
+
