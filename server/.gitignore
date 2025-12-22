@@ -81,3 +81,5 @@ dmypy.json
 
 # models
 models/
+# 백업용 모델, models/과 같은 내용
+.models/  

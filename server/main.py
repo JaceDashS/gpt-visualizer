@@ -16,13 +16,29 @@ app.add_middleware(
 )
 
 
+@app.on_event("startup")
+async def startup_event():
+    """Print server information on startup"""
+    host_display = SERVER_HOST if SERVER_HOST != "0.0.0.0" else "localhost"
+    print(f"\n{'='*60}")
+    print(f"{SERVICE_NAME} Server Started")
+    print(f"Version: {API_VERSION}")
+    print(f"Host: {SERVER_HOST}")
+    print(f"Port: {SERVER_PORT}")
+    print(f"API URL: http://{host_display}:{SERVER_PORT}")
+    print(f"Health Check: http://{host_display}:{SERVER_PORT}/health")
+    print(f"{'='*60}\n")
+
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
+    from model import llama
     return {
         "status": "healthy",
         "service": SERVICE_NAME,
-        "version": API_VERSION
+        "version": API_VERSION,
+        "model_loaded": llama is not None
     }
 
 
@@ -34,4 +50,10 @@ async def visualize_endpoint(request: VisualizeRequest):
 
 if __name__ == "__main__":
     import uvicorn
+    print(f"\n{'='*60}")
+    print(f"Starting {SERVICE_NAME} server...")
+    print(f"Host: {SERVER_HOST}")
+    print(f"Port: {SERVER_PORT}")
+    print(f"API URL: http://{SERVER_HOST if SERVER_HOST != '0.0.0.0' else 'localhost'}:{SERVER_PORT}")
+    print(f"{'='*60}\n")
     uvicorn.run(app, host=SERVER_HOST, port=SERVER_PORT)

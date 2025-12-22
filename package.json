@@ -11,7 +11,7 @@
     "server:dev": "cd server && .\\venv\\Scripts\\python.exe main.py",
     "server:install": "cd server && .\\venv\\Scripts\\pip.exe install -r requirements.txt",
     "server:docker:build": "cd server && docker build -t gpt-visualizer-server .",
-    "server:docker:run": "docker run -d -p 8000:8000 --name gpt-visualizer-server gpt-visualizer-server",
+    "server:docker:run": "docker run -d -p 7860:7860 --name gpt-visualizer-server gpt-visualizer-server",
     "server:docker:stop": "docker stop gpt-visualizer-server",
     "server:docker:logs": "docker logs -f gpt-visualizer-server",
     "install:all": "npm install && npm run server:install",
