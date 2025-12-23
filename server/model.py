@@ -140,10 +140,18 @@ def load_gguf_model():
     # #endregion
     if not GGUF_PATH.exists():
         print(f"Model not found at {GGUF_PATH}")
-        raise FileNotFoundError(
-            f"Model file not found: {GGUF_PATH}\n"
-            f"Please ensure the model file exists in the local models/ folder."
-        )
+        print(f"Attempting to download model from Hugging Face...")
+        try:
+            # 모델이 없으면 Hugging Face에서 자동 다운로드
+            downloaded_path = download_model_from_hf()
+            print(f"Model downloaded successfully: {downloaded_path}")
+        except Exception as e:
+            print(f"Failed to download model: {e}")
+            raise FileNotFoundError(
+                f"Model file not found: {GGUF_PATH}\n"
+                f"Automatic download from Hugging Face also failed: {e}\n"
+                f"Please check your internet connection and try again."
+            )
     else:
         print(f"Using existing model from local models/ folder: {GGUF_PATH}")
     
