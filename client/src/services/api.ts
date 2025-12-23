@@ -32,7 +32,7 @@ export const visualizeApi = {
   async getTokenVectors(inputText: string): Promise<VisualizeResponse> {
     try {
       // 테스트용: 로컬 서버로 직접 요청
-      const response = await fetch('http://localhost:8000/api/visualize', {
+      const response = await fetch('http://localhost:7860/api/visualize', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

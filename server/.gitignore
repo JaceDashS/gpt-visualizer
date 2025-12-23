@@ -79,7 +79,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# models
-models/
-# 백업용 모델, models/과 같은 내용
-.models/  
+# Model files (too large for git)
+models/*.gguf
+models/*.bin
+models/*.safetensors
