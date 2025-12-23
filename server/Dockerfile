@@ -24,6 +24,10 @@ RUN mkdir -p models
 COPY model.py .
 
 # 빌드 타임에 모델 다운로드
+# download_model_from_hf() 함수가 로컬에 파일이 있으면 스킵하므로
+# 로컬 models/ 폴더에 모델이 있으면 빌드 컨텍스트에 포함되어 COPY로 복사 가능
+# (models/ 폴더가 .dockerignore에 없으면 빌드 컨텍스트에 포함됨)
+# 로컬에 모델이 없으면 Hugging Face에서 다운로드
 RUN python -c "from model import download_model_from_hf; download_model_from_hf()"
 
 # 나머지 서버 코드 복사

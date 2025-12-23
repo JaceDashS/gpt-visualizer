@@ -59,20 +59,19 @@ def load_gguf_model():
     # llama_cpp import (lazy)
     Llama = _import_llama_cpp()
     
-    # 모델 파일 존재 확인 (빌드 타임에 다운로드되어 있어야 함)
+    # 먼저 로컬 models/ 폴더에서 모델 파일 확인
     if not GGUF_PATH.exists():
-        # 런타임 다운로드는 환경 변수로 제어
-        if os.getenv("ALLOW_RUNTIME_DOWNLOAD", "false").lower() == "true":
-            print("Warning: Downloading model at runtime (should be downloaded at build time)")
+        print(f"Model not found at {GGUF_PATH}, attempting to download from Hugging Face...")
+        try:
             download_model_from_hf()
-        else:
+        except Exception as e:
+            print(f"Failed to download model: {e}")
             raise FileNotFoundError(
                 f"Model file not found: {GGUF_PATH}\n"
-                "Model should be downloaded at build time. "
-                "If you need runtime download, set ALLOW_RUNTIME_DOWNLOAD=true"
+                f"Download from Hugging Face also failed: {e}"
             )
     else:
-        print(f"Using existing model: {GGUF_PATH}")
+        print(f"Using existing model from local models/ folder: {GGUF_PATH}")
     
     # 모델 파일 존재 확인
     if not GGUF_PATH.exists():
