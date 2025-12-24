@@ -80,6 +80,8 @@ dmypy.json
 .pyre/
 
 # Model files (too large for git)
+models/
 models/*.gguf
 models/*.bin
 models/*.safetensors
+

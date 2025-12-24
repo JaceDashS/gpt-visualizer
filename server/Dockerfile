@@ -45,5 +45,5 @@ ENV SERVER_PORT=7860
 # 모델 스레드 설정 (도커 환경에서는 2스레드 사용)
 ENV LLAMA_N_THREADS=2
 
-# FastAPI라면 uvicorn 권장
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+# llama_cpp.server 사용 (Python 기본 HTTP 서버)
+CMD ["python", "main.py"]
