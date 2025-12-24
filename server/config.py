@@ -14,3 +14,8 @@ CORS_ORIGINS = [
 API_VERSION = "1.0.0"
 SERVICE_NAME = "GPT Visualizer"
 
+# 모델 스레드 설정
+# 환경변수 LLAMA_N_THREADS로 오버라이드 가능 (Docker에서는 ENV로 설정)
+# 기본값: 1 (로컬과 Docker 모두)
+LLAMA_N_THREADS = int(os.getenv("LLAMA_N_THREADS", "1"))
+

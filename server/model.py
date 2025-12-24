@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from huggingface_hub import hf_hub_download
+from config import LLAMA_N_THREADS
 
 # llama_cpp는 런타임에 사용되므로 lazy import 사용
 _llama_cpp_module = None
@@ -156,11 +157,10 @@ def load_gguf_model():
         print(f"Using existing model from local models/ folder: {GGUF_PATH}")
     
     print(f"Loading model from: {GGUF_PATH}")
-    # 스레드 수 설정: chat_llama_q4km.py 참고 (성공적으로 작동하는 설정)
-    # chat_llama_q4km.py에서 n_threads=8로 고정하여 성공적으로 실행됨
-    # Windows에서는 access violation 방지를 위해 8로 고정
-    n_threads = 8
-    print(f"Using {n_threads} threads for model inference")
+    # 스레드 수 설정: config.py에서 관리 (기본값: 1)
+    # Docker 환경에서는 ENV LLAMA_N_THREADS로 오버라이드 가능
+    n_threads = LLAMA_N_THREADS
+    print(f"Using {n_threads} threads for model inference (from config.LLAMA_N_THREADS={LLAMA_N_THREADS})")
     
     # #region agent log
     debug_log("model.py:80", "BEFORE Llama() CONSTRUCTOR", {"model_path": str(GGUF_PATH), "n_threads": n_threads, "n_ctx": 4096, "embedding": True}, "C")

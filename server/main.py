@@ -176,6 +176,11 @@ def main():
     except KeyboardInterrupt:
         print("\n[SERVER] Shutting down server...")
         httpd.shutdown()
+    except Exception as e:
+        print(f"[SERVER] Server error: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
 
 
 if __name__ == "__main__":

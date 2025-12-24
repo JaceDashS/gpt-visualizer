@@ -42,8 +42,8 @@ EXPOSE 7860
 ENV SERVER_HOST=0.0.0.0
 ENV SERVER_PORT=7860
 
-# 모델 스레드 설정 (도커 환경에서는 2스레드 사용)
-ENV LLAMA_N_THREADS=2
+# 모델 스레드 설정 (도커 환경에서는 1스레드 사용)
+ENV LLAMA_N_THREADS=1
 
-# llama_cpp.server 사용 (Python 기본 HTTP 서버)
+# Python 기본 HTTP 서버 사용
 CMD ["python", "main.py"]
