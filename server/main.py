@@ -7,6 +7,7 @@ import sys
 from typing import Dict, Any
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
+from datetime import datetime
 
 from config import SERVER_HOST, SERVER_PORT, API_VERSION, SERVICE_NAME
 from model import ensure_model_loaded, llama, GGUF_PATH
@@ -14,6 +15,28 @@ from model import ensure_model_loaded, llama, GGUF_PATH
 
 class VisualizeHandler(BaseHTTPRequestHandler):
     """HTTP handler for visualization endpoints"""
+    
+    def _log_request(self, method: str, path: str, status_code: int = None, reason: str = None):
+        """Log all incoming requests with details"""
+        client_ip = self.client_address[0] if self.client_address else 'unknown'
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        log_msg = f"[{timestamp}] {method} {path} | IP: {client_ip}"
+        if status_code:
+            log_msg += f" | Status: {status_code}"
+        if reason:
+            log_msg += f" | Reason: {reason}"
+        
+        print(log_msg)
+        
+        # Log headers for debugging
+        if self.headers:
+            headers_info = []
+            for key, value in self.headers.items():
+                if key.lower() in ['content-type', 'content-length', 'user-agent', 'host', 'origin', 'referer']:
+                    headers_info.append(f"{key}: {value}")
+            if headers_info:
+                print(f"  Headers: {', '.join(headers_info)}")
     
     def _set_cors_headers(self):
         """Set CORS headers"""
@@ -23,6 +46,9 @@ class VisualizeHandler(BaseHTTPRequestHandler):
     
     def do_OPTIONS(self):
         """Handle OPTIONS request for CORS"""
+        parsed_path = urlparse(self.path)
+        self._log_request('OPTIONS', parsed_path.path, 200, 'CORS preflight')
+        
         self.send_response(200)
         self._set_cors_headers()
         self.end_headers()
@@ -30,20 +56,24 @@ class VisualizeHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handle GET requests"""
         parsed_path = urlparse(self.path)
+        self._log_request('GET', parsed_path.path)
         
         if parsed_path.path == '/health' or parsed_path.path == '/':
             self._handle_health()
         else:
-            self._send_error(404, "Not Found")
+            reason = f"Path '{parsed_path.path}' is not supported. Supported paths: /, /health"
+            self._send_error(404, "Not Found", reason)
     
     def do_POST(self):
         """Handle POST requests"""
         parsed_path = urlparse(self.path)
+        self._log_request('POST', parsed_path.path)
         
         if parsed_path.path == '/api/visualize':
             self._handle_visualize()
         else:
-            self._send_error(404, "Not Found")
+            reason = f"Path '{parsed_path.path}' is not supported. Supported paths: /api/visualize"
+            self._send_error(404, "Not Found", reason)
     
     def _handle_health(self):
         """Handle health check endpoint"""
@@ -97,12 +127,14 @@ class VisualizeHandler(BaseHTTPRequestHandler):
             input_text = request_data.get('input_text', '')
             
             if not input_text:
-                self._send_error(400, "input_text is required")
+                reason = "Request body must contain 'input_text' field with a non-empty value"
+                self._send_error(400, "input_text is required", reason)
                 return
             
             # Ensure model is loaded
             if not ensure_model_loaded():
-                self._send_error(503, "Model is not loaded. Please try again later.")
+                reason = "The AI model is not currently loaded. The server may still be initializing."
+                self._send_error(503, "Model is not loaded. Please try again later.", reason)
                 return
             
             # Import visualization logic (visualize_sync will use model.llama internally)
@@ -129,16 +161,21 @@ class VisualizeHandler(BaseHTTPRequestHandler):
             
             self._send_json_response(200, response_dict)
             
-        except json.JSONDecodeError:
-            self._send_error(400, "Invalid JSON in request body")
+        except json.JSONDecodeError as e:
+            reason = f"Request body is not valid JSON: {str(e)}"
+            self._send_error(400, "Invalid JSON in request body", reason)
         except Exception as e:
             print(f"[ERROR] Visualize endpoint error: {e}")
             import traceback
             traceback.print_exc()
-            self._send_error(500, f"Internal server error: {str(e)}")
+            reason = f"An unexpected error occurred while processing the request: {str(e)}"
+            self._send_error(500, f"Internal server error: {str(e)}", reason)
     
     def _send_json_response(self, status_code: int, data: Dict[str, Any]):
         """Send JSON response"""
+        parsed_path = urlparse(self.path)
+        self._log_request(self.command, parsed_path.path, status_code, 'Success')
+        
         self.send_response(status_code)
         self.send_header('Content-Type', 'application/json')
         self._set_cors_headers()
@@ -147,14 +184,34 @@ class VisualizeHandler(BaseHTTPRequestHandler):
         response_json = json.dumps(data, ensure_ascii=False)
         self.wfile.write(response_json.encode('utf-8'))
     
-    def _send_error(self, status_code: int, message: str):
-        """Send error response"""
+    def _send_error(self, status_code: int, message: str, reason: str = None):
+        """Send error response with detailed reason"""
+        parsed_path = urlparse(self.path)
+        
+        error_response = {
+            "error": message,
+            "status_code": status_code,
+            "path": parsed_path.path,
+            "method": self.command
+        }
+        
+        if reason:
+            error_response["reason"] = reason
+        
+        # Add supported endpoints information for 404 errors
+        if status_code == 404:
+            if self.command == 'GET':
+                error_response["supported_paths"] = ["/", "/health"]
+            elif self.command == 'POST':
+                error_response["supported_paths"] = ["/api/visualize"]
+        
+        self._log_request(self.command, parsed_path.path, status_code, reason or message)
+        
         self.send_response(status_code)
         self.send_header('Content-Type', 'application/json')
         self._set_cors_headers()
         self.end_headers()
         
-        error_response = {"error": message, "status_code": status_code}
         response_json = json.dumps(error_response, ensure_ascii=False)
         self.wfile.write(response_json.encode('utf-8'))
     
