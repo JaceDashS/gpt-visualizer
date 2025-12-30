@@ -11,7 +11,6 @@ const HomePage: React.FC = () => {
   // 사용자 입력 상태
   const [inputText, setInputText] = useState<string>('');
   const [submittedText, setSubmittedText] = useState<string>('');
-
   // API 호출 훅
   const {
     visualizationData,
@@ -47,9 +46,10 @@ const HomePage: React.FC = () => {
   // 텍스트 제출 핸들러
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputText.trim()) {
-      setSubmittedText(inputText.trim());
-      fetchVisualization(inputText.trim());
+    const trimmed = inputText.trim();
+    if (trimmed) {
+      setSubmittedText(trimmed);
+      fetchVisualization(trimmed);
     }
   };
 
@@ -97,28 +97,17 @@ const HomePage: React.FC = () => {
     return calculateMidpoint(startPoint, endPoint);
   }, [visualizationData, animationStep, outputTokens, inputTokens]);
 
-  // 출력 텍스트 생성
-  // 구두점(. , 등)은 앞 토큰과 붙여서 표시
-  const isPunctuation = (token: string): boolean => {
-    // 일반적인 구두점 문자들
-    return /^[.,;:!?。，、；：！？]+$/.test(token);
-  };
-  
-  const outputText = (() => {
+  // 출력 텍스트 생성 (useMemo로 계산)
+  const outputText = useMemo(() => {
     const tokens = outputTokens.slice(0, animationStep).map(t => t.token);
-    if (tokens.length === 0) return '';
-    
-    let result = tokens[0];
-    for (let i = 1; i < tokens.length; i++) {
-      // 구두점이면 공백 없이 붙임, 아니면 공백 추가
-      if (isPunctuation(tokens[i])) {
-        result += tokens[i];
-      } else {
-        result += ' ' + tokens[i];
-      }
+    if (tokens.length === 0) {
+      return '';
     }
-    return result;
-  })();
+
+    const normalizedTokens = [...tokens];
+    normalizedTokens[0] = normalizedTokens[0].replace(/^\s+/, '');
+    return normalizedTokens.join('');
+  }, [outputTokens, animationStep]);
 
   const maxOutputSteps = outputTokens.length;
 
@@ -189,4 +178,5 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
 
