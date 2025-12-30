@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { visualizeApi, VisualizeResponse, TokenVector } from '../services/api';
+import { flipDimensionsToForward } from '../utils/vectorMath';
 
 interface UseVisualizationApiReturn {
   visualizationData: VisualizeResponse | null;
@@ -28,8 +29,12 @@ export const useVisualizationApi = (): UseVisualizationApiReturn => {
       try {
         const result = await visualizeApi.getTokenVectors(submittedText);
         console.log('[Visualization API] response:', result);
+        
+        // 각 차원의 합이 음수면 해당 차원 반전하여 전방을 향하도록 조정
+        const orientedTokens = flipDimensionsToForward(result.tokens) as TokenVector[];
+        
         setVisualizationData({
-          tokens: result.tokens,
+          tokens: orientedTokens,
         });
       } catch (err) {
         console.error('Error fetching output:', err);
