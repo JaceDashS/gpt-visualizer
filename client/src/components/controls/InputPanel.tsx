@@ -81,7 +81,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
           disabled={isSubmitDisabled}
           className={submitButtonClasses}
         >
-          {isLoading ? 'Processing...' : 'Visualize'}
+          {isLoading ? <span className={styles.loadingDots}>Processing</span> : 'Visualize'}
         </button>
       </form>
 
@@ -93,7 +93,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
           </div>
           <div>
             <strong className={styles.outputLabel}>Output:</strong>{' '}
-            {isLoading ? 'Loading...' : outputText || '(waiting...)'}
+            {isLoading ? '' : outputText || ''}
           </div>
         </>
       )}

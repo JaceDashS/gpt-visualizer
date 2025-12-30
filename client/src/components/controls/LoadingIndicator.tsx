@@ -5,13 +5,11 @@ interface LoadingIndicatorProps {
   message?: string;
 }
 
-// 로딩 인디케이터
-const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
-  message = 'Processing...',
-}) => {
+// 로딩 인디케이터 (아이콘 애니메이션)
+const LoadingIndicator: React.FC<LoadingIndicatorProps> = () => {
   return (
     <div className={styles.container}>
-      {message}
+      <div className={styles.spinner}></div>
     </div>
   );
 };

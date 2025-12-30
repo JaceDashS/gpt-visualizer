@@ -77,3 +77,28 @@
   color: var(--color-red);
   font-size: 12px;
 }
+
+/* 로딩 애니메이션 (점 3개 깜빡이기) */
+.loadingDots {
+  display: inline-block;
+}
+
+.loadingDots::after {
+  content: '...';
+  animation: loadingDots 1.4s steps(4, end) infinite;
+}
+
+@keyframes loadingDots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75%, 100% {
+    content: '...';
+  }
+}
