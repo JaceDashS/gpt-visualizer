@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:7860',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000',
   timeout: 10000, // 10초
 } as const;
 
