@@ -1,0 +1,114 @@
+.container {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 200px;
+}
+
+.sliderWrapper {
+  position: relative;
+  width: 30px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider {
+  width: 200px;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  position: absolute;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+  margin-top: -6px;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+}
+
+.thumbLabel {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+  font-size: 24px;
+  font-weight: bold;
+  font-family: var(--font-monospace);
+  pointer-events: none;
+  z-index: 1;
+  transition: color 0.1s ease;
+}
+
+.thumbLabel.easterEgg {
+  background: linear-gradient(0deg, hsl(0, 100%, 50%), hsl(60, 100%, 50%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: 
+    rotate 0.3s linear infinite,
+    hueRotate 0.7s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+@keyframes hueRotate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.slider::-webkit-slider-runnable-track {
+  width: 200px;
+  height: 8px;
+  background: var(--color-background-overlay);
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.slider::-moz-range-track {
+  width: 200px;
+  height: 8px;
+  background: var(--color-background-overlay);
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+

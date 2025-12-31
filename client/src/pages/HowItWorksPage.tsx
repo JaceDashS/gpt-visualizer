@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import TokenVisualization from '../components/TokenVisualization';
+import { TextSizeSlider } from '../components/controls';
 import { TokenVector } from '../services/api';
 import { calculateMidpoint, Vector3Tuple } from '../utils/vectorMath';
 import { useAnimationTimer } from '../hooks';
+import { useTextSize } from '../contexts/TextSizeContext';
 import styles from './HowItWorksPage.module.css';
 import { howItWorksData } from '../locales/howItWorks';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -145,6 +147,7 @@ const ASSISTANT_TOKENS: TokenVector[] = [
 ];
 
 const HowItWorksPage: React.FC = () => {
+  const { fontSize } = useTextSize();
   const [step, setStep] = useState<StepId>(0);
   const [replayKey, setReplayKey] = useState(0);
   const { language, setLanguage } = useLanguage();
@@ -472,6 +475,9 @@ const HowItWorksPage: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      {/* 텍스트 크기 조정 슬라이더 */}
+      <TextSizeSlider />
+      
       <TokenVisualization
         tokens={visibleTokens}
         isAnimating={
@@ -492,6 +498,7 @@ const HowItWorksPage: React.FC = () => {
           step === 5 ? step6Animation.growProgress : 
           growProgress
         }
+        fontSize={fontSize}
       />
 
       {/* 상단: 언어 선택 + 스텝 버튼 */}

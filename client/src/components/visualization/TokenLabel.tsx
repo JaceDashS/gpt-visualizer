@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
-import { TEXT_OFFSET_Y, TOKEN_FONT_SIZE, INPUT_TOKEN_COLOR, OUTPUT_TOKEN_COLOR } from '../../constants';
+import { TEXT_OFFSET_Y, INPUT_TOKEN_COLOR, OUTPUT_TOKEN_COLOR } from '../../constants';
+import { useTextSize } from '../../contexts/TextSizeContext';
 import { Vector3Tuple } from '../../utils/vectorMath';
 
 interface TokenLabelProps {
@@ -22,6 +23,7 @@ const TokenLabel: React.FC<TokenLabelProps> = ({
 }) => {
   const groupRef = useRef<THREE.Group>(null);
   const { camera } = useThree();
+  const { fontSize } = useTextSize();
 
   // 문자가 사용자가 보고있는 방향을 항상 보게 함 
   useFrame(() => {
@@ -34,7 +36,7 @@ const TokenLabel: React.FC<TokenLabelProps> = ({
     <group ref={groupRef} position={position}>
       <group position={[0, TEXT_OFFSET_Y, 0]}>
         <Text
-          fontSize={TOKEN_FONT_SIZE}
+          fontSize={fontSize}
           color={isInput ? INPUT_TOKEN_COLOR : OUTPUT_TOKEN_COLOR}
           anchorX="center"
           anchorY="middle"

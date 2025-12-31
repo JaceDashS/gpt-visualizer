@@ -16,6 +16,8 @@ export const ARROW_HEAD_WIDTH_RATIO = 0.4;
 // Text 컴포넌트의 fontSize와 일치
 export const TOKEN_FONT_SIZE = 0.15;
 export const GATHERING_TOKEN_FONT_SIZE = 0.12;
+// 기본 텍스트 크기 (슬라이더 기본값)
+export const DEFAULT_FONT_SIZE = 0.1;
 // 모여드는 토큰 애니메이션 파라미터
 export const GATHERING_TOKEN_OPACITY_BASE = 0.7; // 페이드 시작전 고정 투명도 
 export const GATHERING_TOKEN_OPACITY_FADE_START = 0.9; // 이 지점부터 사라지기 시작

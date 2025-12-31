@@ -13,7 +13,6 @@ import {
   ORBIT_DAMPING_FACTOR,
   AXES_HELPER_SIZE,
   ORIGIN_SPHERE_RADIUS,
-  TOKEN_FONT_SIZE,
   CHAR_WIDTH_RATIO,
   SPACE_WIDTH_RATIO,
   INPUT_TOKEN_COLOR,
@@ -36,6 +35,7 @@ interface TokenVisualizationProps {
   targetPosition?: Vector3Tuple;
   isGrowing?: boolean;
   growProgress?: number;
+  fontSize?: number;
 }
 
 // 전체 시각화 (좌표나 화살표등을 랜더링해줌)
@@ -47,6 +47,7 @@ const TokenVisualization: React.FC<TokenVisualizationProps> = ({
   targetPosition = [0, 0, 0],
   isGrowing = false,
   growProgress = 1,
+  fontSize = 0.075,
 }) => {
   // 시작점을 클라이언트에서 추적하며 토큰 위치 계산
   const calculateTokenPositions = (): TokenData[] => {
@@ -87,7 +88,6 @@ const TokenVisualization: React.FC<TokenVisualizationProps> = ({
         // 그룹 내에서 연속된 같은 타입의 토큰들을 묶어서 하나의 텍스트로 표시
         // 타입이 바뀌면 색상도 바뀌지만 같은 줄에 표시
         const centerPosition = new THREE.Vector3(...tv.destination);
-        const fontSize = TOKEN_FONT_SIZE;
         const charWidth = fontSize * CHAR_WIDTH_RATIO;
         const spaceWidth = fontSize * SPACE_WIDTH_RATIO;
 

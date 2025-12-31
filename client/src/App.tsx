@@ -7,6 +7,7 @@ import FloatingNav from './components/navigation/FloatingNav';
 import AboutOverlay from './components/about/AboutOverlay';
 import FeedbackOverlay from './components/feedback/FeedbackOverlay';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { TextSizeProvider } from './contexts/TextSizeContext';
 
 function App() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -29,6 +30,7 @@ function App() {
 
   return (
     <LanguageProvider>
+    <TextSizeProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -42,6 +44,7 @@ function App() {
       <AboutOverlay isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       <FeedbackOverlay isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
     </BrowserRouter>
+    </TextSizeProvider>
     </LanguageProvider>
   );
 }

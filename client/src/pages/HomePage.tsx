@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import TokenVisualization from '../components/TokenVisualization';
-import { InputPanel, AnimationControlBar, LoadingIndicator } from '../components/controls';
+import { InputPanel, AnimationControlBar, LoadingIndicator, TextSizeSlider } from '../components/controls';
 import { useVisualizationApi, useAnimationTimer } from '../hooks';
+import { useTextSize } from '../contexts/TextSizeContext';
 import { TokenVector } from '../services/api';
 import { calculateMidpoint, Vector3Tuple } from '../utils/vectorMath';
 import styles from './HomePage.module.css';
@@ -11,6 +12,17 @@ const HomePage: React.FC = () => {
   // 사용자 입력 상태
   const [inputText, setInputText] = useState<string>('');
   const [submittedText, setSubmittedText] = useState<string>('');
+  // 텍스트 크기
+  const { fontSize, setEasterEggActive } = useTextSize();
+  
+  // 이스터에그 체크: "Jace is cool." (대소문자 무시) - submit 시에만 체크하고 유지
+  useEffect(() => {
+    if (submittedText) {
+      const normalizedInput = submittedText.trim().toLowerCase();
+      const isEasterEgg = normalizedInput === 'jace is cool.';
+      setEasterEggActive(isEasterEgg);
+    }
+  }, [submittedText, setEasterEggActive]);
   // API 호출 훅
   const {
     visualizationData,
@@ -135,6 +147,9 @@ const HomePage: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      {/* 텍스트 크기 조정 슬라이더 */}
+      <TextSizeSlider />
+      
       {/* 상단 입력 패널 */}
       <InputPanel
         inputText={inputText}
@@ -154,6 +169,7 @@ const HomePage: React.FC = () => {
         targetPosition={nextTargetPosition}
         isGrowing={isGrowing}
         growProgress={growProgress}
+        fontSize={fontSize}
       />
 
       {/* 로딩 인디케이터 */}
