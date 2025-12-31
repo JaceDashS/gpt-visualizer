@@ -121,9 +121,29 @@ const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ isOpen, onClose }) =>
     return null;
   }
 
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // backdrop을 직접 클릭한 경우에만 닫기 (sheet 내부 클릭은 무시)
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  const handleSheetClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // sheet 내부 클릭은 backdrop으로 전파되지 않도록
+    e.stopPropagation();
+  };
+
   return (
-    <div className={styles.backdrop} aria-modal="true" role="dialog">
-      <div className={`${styles.sheet} ${isClosing ? styles.closing : ''}`}>
+    <div 
+      className={styles.backdrop} 
+      aria-modal="true" 
+      role="dialog"
+      onClick={handleBackdropClick}
+    >
+      <div 
+        className={`${styles.sheet} ${isClosing ? styles.closing : ''}`}
+        onClick={handleSheetClick}
+      >
         <button
           type="button"
           className={styles.closeButton}
