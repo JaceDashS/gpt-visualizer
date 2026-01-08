@@ -1,7 +1,17 @@
 import os
+import sys
+import io
 from pathlib import Path
 from huggingface_hub import hf_hub_download
 from config import LLAMA_N_THREADS
+
+# Windows에서 UTF-8 인코딩 설정
+if sys.platform == 'win32':
+    try:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    except Exception:
+        pass  # 이미 설정되었거나 실패한 경우 무시
 
 # llama_cpp는 런타임에 사용되므로 lazy import 사용
 _llama_cpp_module = None
@@ -190,7 +200,15 @@ def load_gguf_model():
             # #region agent log
             debug_log("model.py:constructor", "STDERR DURING CONSTRUCTOR", {"stderr": stderr_output}, "H2")
             # #endregion
-            print(f"[STDERR] {stderr_output}")
+            try:
+                print(f"[STDERR] {stderr_output}")
+            except (UnicodeEncodeError, UnicodeDecodeError) as e:
+                # 인코딩 에러 발생 시 안전하게 처리
+                try:
+                    safe_output = stderr_output.encode('utf-8', errors='replace').decode('utf-8', errors='replace')
+                    print(f"[STDERR] {safe_output[:500]}")  # 최대 500자만 출력
+                except Exception:
+                    print("[STDERR] (Unable to display stderr output due to encoding issues)")
         # #region agent log
         debug_log("model.py:88", "AFTER Llama() CONSTRUCTOR SUCCESS", {"llama_object": str(type(llama))}, "C")
         # #endregion
