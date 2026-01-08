@@ -1,4 +1,4 @@
-import { API_BASE_URL, ASSETS_CONFIG } from '../config/api';
+import { API_BASE_URL, API_PREFIX, ASSETS_CONFIG } from '../config/api';
 
 export interface VisualizeRequest {
   input_text: string;
@@ -31,7 +31,7 @@ export const visualizeApi = {
    */
   async getTokenVectors(inputText: string): Promise<VisualizeResponse> {
     try {
-      const requestUrl = `${API_BASE_URL}/api/gptvisualizer/visualize`;
+      const requestUrl = `${API_BASE_URL}${API_PREFIX}/visualize`;
       // console.log('[API] Request URL:', requestUrl);
       // console.log('[API] API_BASE_URL:', API_BASE_URL);
       // console.log('[API] REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
